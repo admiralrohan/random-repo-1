@@ -1,0 +1,41 @@
+1) What’s wrong with this code snippet?
+In template, the `div` tag is not closed properly.
+
+2) How can we improve it?
+I. Inside constructor, `this` isn't necessary. As we can access `_authService` through function's internal scope.
+
+II. Also `private` keyword isn't necessary. We are not accessing `_authService` from any method other than constructor so we don't need to attach it with scope of the whole class.
+Maybe an personal preference. I don't like to give unnecessary scope to any variable.
+
+I am suggesting this
+```ts
+constructor(authService: AuthService) {
+	authService.user.subscribe(user => {
+		this._user = user;
+	});
+}
+```
+
+III. We are not unsubscribing to the subscription to `_authService.user`
+Now I don't know how `user` is implemented. If it's coming from `HttpClient` then it's automatically unsubscribed after the call.
+We can use async pipe to remove all confusions.
+
+IV. First impression, `getUserName()` can be converted into a getter method. Easier to read.
+Now, `getUserName` is being called unlimited times from the template. Can be a performance issue at larger scale.
+Should have used `_user` property. (We can use it from template if we convert into `public`)
+
+V. Should have used types for `_user` and `user` inside `subscribe()`
+
+VI. Observation:
+Class `user-panel` is unused. And the class has not stylesheet attached with it.
+Although it may come from global `style.css`
+
+VII. Observation:
+This component have only one purpose - to show the username. Seems like good candidate for being a dumb component.
+We can consider using `@Input()` in that case. And passing down data from smart component.
+
+3) What benefits and drawbacks of each method?
+Already mentioned everything for last question.
+
+constructor() -> Easy implementation, but have to manually unsubscribe.
+getUserName() -> Benefit is you can make the `_user` property private. But cons is performance issue.

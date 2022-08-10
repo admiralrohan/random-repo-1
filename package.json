@@ -1,0 +1,16 @@
+{
+  "name": "roonyx-tech",
+  "version": "1.0.0",
+  "description": "Install `tsc` globally to run.",
+  "main": "1-http-request-handling.js",
+  "scripts": {
+    "problem-1": "tsc 1-http-request-handling.ts && node 1-http-request-handling.js",
+    "problem-2": "tsc 2-counter-function.test.ts && node 2-counter-function.test.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^18.6.5"
+  }
+}

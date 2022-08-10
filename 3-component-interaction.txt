@@ -1,0 +1,45 @@
+Imagine that we have two components - ComponentA and ComponentB. Both
+components have to interact with each other in some way:
+- Send some data from ComponentA to ComponentB and vice versa.
+- Call some methods from ComponentA to ComponentB and vice versa
+
+Given this information, please answer following questions:
+1) What options do we have to establish such communication?
+2) For each option describe what are the pros and cons of this solution?
+3) For each option describe what are the cases the solution fits best?
+
+Answer:
+Options we have
+I. @Input() and @Output()
+Can be used for passing data
+`Input` is used to pass data from parent to child component.
+`Output` is used to pass data from child to parent component via events.
+
+Pros: Simplest of all solutions
+Caveat: Can only be used if the components have parent-child relationship.
+Cons: If A and B are not direct parent-child, then we have to move the data through multiple levels, that is really cumbersome and hard to manage at large scale.
+
+II. Using a service
+Here we store data in a service class.
+Then we call that using dependency injection on both classes.
+
+Pros: No duplication of logic
+Cons: More complex than solution I
+
+III. Some kind of centralized local DB to store data for whole app eg. custom made store using `BehaviorSubject` or Ngrx store.
+In each component, you subscribe to the store, and it automatically updates your component with latest data.
+
+Pros: Designed to scale
+Cons: More complex than solution II
+
+IV: Viewchild
+For calling method of other component, you can call methods of child component, if you have access to the template using Viewchild.
+
+V: Indirect ways
+I don't know any other way to call methods of other component directly, but you can use events to trigger method calls. Events like `@Output` or store change
+
+eg. You want to call `method1` in CompA from CompB
+In CompA you subscribe to store for variable `changeTracker` which is a boolean (value doesn't matter)
+When `changeTracker` value changes you call `method1` in CompA
+
+In CompB you update the value of `changeTracker` when you want to call `method1`
